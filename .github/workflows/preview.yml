@@ -23,13 +23,6 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - name: Usa la build compilata al posto dei sorgenti Vite
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.request('PUT /repos/{owner}/{repo}/pages', {
-              ...context.repo, build_type: 'workflow', https_enforced: true
-            });
       - uses: actions/configure-pages@v5
       - run: npm ci
       - name: Compila solo la prova locale, senza backend o pagamenti

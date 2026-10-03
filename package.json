@@ -16,9 +16,19 @@
     "test:browser": "playwright test",
     "format": "prettier --write src shared worker scripts tests *.json *.ts docs README.md",
     "dev:demo": "vite --host 0.0.0.0 --mode demo",
-    "build:demo": "tsc -b && vite build --mode demo"
+    "build:demo": "tsc -b && vite build --mode demo",
+    "mobile:sync": "npm run build:demo && cap sync",
+    "mobile:android": "npm run mobile:sync && cd android && ./gradlew assembleDebug",
+    "mobile:ios": "npm run mobile:sync && cap open ios"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/filesystem": "^8.1.4",
+    "@capacitor/ios": "^8.5.2",
+    "@capacitor/share": "^8.0.3",
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource-variable/manrope": "^5.3.0",
     "exceljs": "^4.4.0",
@@ -30,6 +40,7 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
     "@cloudflare/workers-types": "^5.20261003.1",
     "@firebase/rules-unit-testing": "^5.0.2",
     "@playwright/test": "^1.63.0",

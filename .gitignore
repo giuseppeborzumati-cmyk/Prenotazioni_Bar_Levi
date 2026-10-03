@@ -17,3 +17,18 @@ playwright-report/
 verification/
 
 *.log
+
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/
+android/app/src/main/assets/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/DerivedData/
+*.xcuserstate
+xcuserdata/
+*.keystore
+*.jks
+release/

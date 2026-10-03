@@ -126,9 +126,11 @@ label small {
   z-index: 200;
   background: white;
   padding: 15px;
+  clip-path: inset(50%);
 }
 .skip-link:focus {
   top: 10px;
+  clip-path: none;
 }
 .sidebar {
   width: 250px;
@@ -2700,5 +2702,57 @@ td small {
   }
   .detail-bottom {
     flex-wrap: wrap;
+  }
+}
+.install-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #eeeee6;
+  border: 1px solid #e0e4d8;
+  padding: 14px 18px;
+  border-radius: 16px;
+  margin-bottom: 22px;
+  font-size: 13px;
+}
+.install-card > svg {
+  flex-shrink: 0;
+  color: #607563;
+}
+.install-card > div {
+  flex: 1;
+}
+.install-card p {
+  margin: 3px 0 0;
+  color: #67726a;
+}
+.install-card .text-button {
+  white-space: nowrap;
+}
+.native-landing {
+  max-width: 580px;
+  margin: 12vh auto;
+  padding: 32px;
+}
+.native-landing h1 {
+  font-size: clamp(32px, 6vw, 52px);
+  letter-spacing: -2px;
+}
+.native-landing p {
+  line-height: 1.7;
+}
+@media (max-width: 600px) {
+  .install-card {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .install-card > div {
+    min-width: 200px;
+  }
+  .install-card .text-button {
+    margin-left: 32px;
+  }
+  .content {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
   }
 }

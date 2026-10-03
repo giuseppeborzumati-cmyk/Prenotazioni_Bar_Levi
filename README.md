@@ -6,6 +6,10 @@ Applicazione per le prenotazioni del bar dell’I.I.S. Primo Levi di Seregno. In
 
 ## Prova subito
 
+L’[anteprima didattica su GitHub Pages](https://giuseppeborzumati-cmyk.github.io/Prenotazioni_Bar_Levi/) viene pubblicata dal workflow `preview.yml`. È una simulazione locale senza pagamenti né invio di ordini. Non è il servizio ufficiale dell’istituto: inserire esclusivamente dati fittizi. GitHub Pages non viene usato per il servizio commerciale reale.
+
+**Telefono:** sono inclusi l’app web installabile su Android/iPhone, il progetto Android per generare l’APK di collaudo e il progetto iOS per Xcode. Vedi [APP_MOBILI.md](docs/APP_MOBILI.md). Gli APK prodotti dal workflow si trovano nella sezione **Actions → App Android e progetto iOS → Artifacts**. Le app di prova usano dati locali; il servizio reale richiede l’attivazione descritta sotto.
+
 Node 22.12 o successivo:
 
 ```bash
@@ -60,6 +64,7 @@ Segui [ATTIVAZIONE.md](docs/ATTIVAZIONE.md). La configurazione Firebase fornita 
 - [Catalogo, ricette ed Excel](docs/EXCEL.md)
 - [Privacy e adempimenti da completare](docs/PRIVACY.md)
 - [Prove eseguite e modello di collaudo](docs/COLLAUDO.md)
+- [App Android, iPhone e installazione](docs/APP_MOBILI.md)
 - [Modello Excel scaricabile](public/modello_catalogo.xlsx)
 
 ## Verifiche ripetibili

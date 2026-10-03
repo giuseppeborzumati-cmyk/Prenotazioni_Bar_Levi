@@ -69,6 +69,7 @@ import { live } from "./firebase";
 import { DEMO_ACCOUNTS } from "./demo";
 import { downloadCSV, orderPDF, reportPDF } from "./documents";
 import { parseExcel } from "./excel";
+import { InstallApp } from "./InstallApp";
 const EMPTY: Snapshot = {
   profile: null,
   products: [],
@@ -505,8 +506,10 @@ export default function App() {
         {IS_DEMO && (
           <div className="demo-strip">
             <span>
-              <span className="demo-dot" /> Ambiente dimostrativo: usa dati
-              fittizi. Nessun pagamento reale.
+              <span className="demo-dot" />
+              {import.meta.env.VITE_EDUCATIONAL_PREVIEW === "true"
+                ? "Prototipo didattico, non servizio ufficiale: usa solo dati fittizi. Nessun ordine al bar o pagamento reale."
+                : "Ambiente dimostrativo: usa dati fittizi. Nessun pagamento reale."}
             </span>
             <button onClick={() => setAuth("login")}>
               Prova i diversi ruoli <ArrowRight size={14} />
@@ -514,6 +517,7 @@ export default function App() {
           </div>
         )}
         <main id="main" className="content">
+          <InstallApp />
           {error && (
             <div role="alert" className="notice error">
               <AlertCircle size={20} />

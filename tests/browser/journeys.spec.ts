@@ -21,6 +21,56 @@ test.beforeEach(async ({ page }) => {
   ).toBeVisible();
   page.on("dialog", (d) => d.accept());
 });
+test("app installabile e modalità offline senza dati personali nella cache", async ({
+  page,
+  context,
+}) => {
+  const manifest = await (
+    await page.request.get("/manifest.webmanifest")
+  ).json();
+  expect(manifest.display).toBe("standalone");
+  for (const icon of manifest.icons)
+    expect((await page.request.get("/" + icon.src)).ok()).toBe(true);
+  await page.getByRole("button", { name: "Installa app", exact: true }).click();
+  await expect(
+    page.getByText("Aggiungi alla schermata Home", { exact: false }),
+  ).toBeVisible();
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.register("/sw.js");
+    await navigator.serviceWorker.ready;
+    if (!navigator.serviceWorker.controller)
+      await new Promise<void>((resolve) =>
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          () => resolve(),
+          { once: true },
+        ),
+      );
+  });
+  await page.reload();
+  const cachedPaths = await page.evaluate(async () => {
+    const result: string[] = [];
+    for (const name of await caches.keys()) {
+      for (const request of await (await caches.open(name)).keys())
+        result.push(new URL(request.url).pathname);
+    }
+    return result;
+  });
+  expect(cachedPaths).toEqual(["/offline.html"]);
+  await context.setOffline(true);
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Ci ritroviamo quando torna la rete." }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Nessun ordine è stato inviato", { exact: false }),
+  ).toBeVisible();
+  await context.setOffline(false);
+  await page.getByRole("link", { name: "Riprova" }).click();
+  await expect(
+    page.getByRole("button", { name: "Aggiungi La Caprese", exact: true }),
+  ).toBeVisible();
+});
 test("studente → carrello → PDF → bar → incasso → ritiro", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));

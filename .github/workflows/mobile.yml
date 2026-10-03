@@ -1,0 +1,64 @@
+name: App Android e progetto iOS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      [
+        "src/**",
+        "shared/**",
+        "public/**",
+        "android/**",
+        "ios/**",
+        "package*.json",
+        "capacitor.config.ts",
+        ".github/workflows/mobile.yml",
+      ]
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+      - run: npm ci
+      - run: npm run mobile:sync
+      - run: bash android/gradlew -p android assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Intervallo-Android-Prova
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+  ios-simulator:
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run mobile:sync
+      - run: xcodebuild -version
+      - name: Compila per simulatore, senza certificati Apple
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath ios/App/DerivedData CODE_SIGNING_ALLOWED=NO build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Intervallo-iOS-Solo-Simulatore
+          path: ios/App/DerivedData/Build/Products/Debug-iphonesimulator/App.app
+          retention-days: 7

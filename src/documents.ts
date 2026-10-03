@@ -1,6 +1,7 @@
 import type { Order, Settings } from "../shared/types";
 import { SLOTS, money } from "../shared/domain";
 import { IS_DEMO } from "./api";
+import { saveFile } from "./mobile";
 export async function orderPDF(order: Order, settings: Settings) {
   const { jsPDF } = await import("jspdf");
   const pdf = new jsPDF();
@@ -110,7 +111,7 @@ export async function orderPDF(order: Order, settings: Settings) {
     16,
     285,
   );
-  pdf.save(`Prenotazione_${order.id}.pdf`);
+  await saveFile(`Prenotazione_${order.id}.pdf`, pdf.output("blob"));
 }
 export async function reportPDF(
   title: string,
@@ -138,9 +139,9 @@ export async function reportPDF(
     }
     y += 2;
   }
-  pdf.save(filename);
+  await saveFile(filename, pdf.output("blob"));
 }
-export function downloadCSV(name: string, rows: (string | number)[][]) {
+export async function downloadCSV(name: string, rows: (string | number)[][]) {
   const text = rows
     .map((row) =>
       row
@@ -153,13 +154,8 @@ export function downloadCSV(name: string, rows: (string | number)[][]) {
     )
     .join("\r\n");
   const blob = new Blob(["\uFEFF" + text], { type: "text/csv;charset=utf-8" });
-  downloadBlob(name, blob);
+  await downloadBlob(name, blob);
 }
-export function downloadBlob(name: string, blob: Blob) {
-  const u = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = u;
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(u), 1000);
+export async function downloadBlob(name: string, blob: Blob) {
+  await saveFile(name, blob);
 }

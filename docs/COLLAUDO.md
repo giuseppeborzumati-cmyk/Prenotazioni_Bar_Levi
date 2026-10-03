@@ -4,7 +4,7 @@ Le verifiche locali devono essere distinte dal collaudo del servizio pubblicato.
 
 ## Esito locale del 3 ottobre 2026
 
-Superati: 24 test dominio/API/Excel, 4 gruppi di test delle regole Firestore e tutti i 4 percorsi browser. Compilazione frontend reale e pacchetto Worker riuscite. `npm audit --omit=dev` non segnala vulnerabilità note nell’albero delle dipendenze di produzione dopo gli aggiornamenti applicati. Questo risultato non è un penetration test né copre automaticamente ogni dipendenza di sviluppo o ogni configurazione cloud.
+Superati: 24 test dominio/API/Excel, 4 gruppi di test delle regole Firestore e tutti i 5 percorsi browser. Compilazione frontend reale, pacchetto Worker e APK Android riuscite. `npm audit --omit=dev` non segnala vulnerabilità note nell’albero delle dipendenze di produzione dopo gli aggiornamenti applicati, incluse le dipendenze mobili. Questo risultato non è un penetration test né copre automaticamente ogni dipendenza di sviluppo o ogni configurazione cloud.
 
 ## Test automatici inclusi
 
@@ -12,12 +12,15 @@ Superati: 24 test dominio/API/Excel, 4 gruppi di test delle regole Firestore e t
 
 **4 gruppi di test Firestore nell’emulatore**: creazione profilata, divieto di autoapprovazione/escalation, esclusione anonimi e profili altrui, negazione di accesso diretto ai dati operativi anche ai claim amministrativi.
 
-**4 percorsi browser**:
+**5 percorsi browser**:
 
 1. Studente: carrello, ordine, PDF; bar: preparazione, incasso e consegna con codice.
 2. Registrazione personale, stato in attesa, approvazione scuola, accesso con ruolo corretto e isolamento storico.
 3. Importazione del modello Excel, anteprima/conferma, fabbisogno e schermo ritiri privo di nomi.
 4. Telefono: filtro vegano, navigazione e controllo scorrimento orizzontale.
+5. Manifest e icone dell’app, istruzioni di installazione, funzionamento offline e verifica che la cache contenga soltanto la pagina pubblica di assenza connessione.
+
+**Android:** compilazione Gradle `assembleDebug` con JDK 21 e SDK 36; verifica della firma e dei metadati dell’APK. Non è stata eseguita una prova su dispositivo Android fisico. Per iOS è fornito il progetto Xcode e un workflow di compilazione per simulatore: la disponibilità dell’artefatto dipende dall’esito effettivo di Actions. Non viene attestata una prova su iPhone né una distribuzione con firma Apple.
 
 I test browser usano l’ambiente di prova; il ritiro fuori fascia è permesso **soltanto nella simulazione** e chiaramente indicato. Il controllo della fascia reale è testato nel backend.
 

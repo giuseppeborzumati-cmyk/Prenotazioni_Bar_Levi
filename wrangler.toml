@@ -1,0 +1,17 @@
+name = "bar-levi-api"
+main = "worker/index.ts"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+FIREBASE_PROJECT_ID = "bar-prenotazione-levi"
+FIREBASE_PROJECT_NUMBER = "680627424161"
+FIREBASE_APP_ID = "1:680627424161:web:86df1047e915c74d5759e0"
+ALLOWED_ORIGIN = "https://bar-prenotazione-levi.web.app"
+NEXI_ENABLED = "false"
+NEXI_ENV = "sandbox"
+# Set PUBLIC_API_URL after the first Worker deployment, before testing Nexi.
+# All private keys, API keys and TOTP secrets MUST use `wrangler secret put`.
+
+[observability]
+enabled = false

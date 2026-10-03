@@ -1,0 +1,8 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    { "collectionGroup": "orders", "fieldPath": "lines", "indexes": [] },
+    { "collectionGroup": "config", "fieldPath": "products", "indexes": [] },
+    { "collectionGroup": "config", "fieldPath": "ingredients", "indexes": [] }
+  ]
+}

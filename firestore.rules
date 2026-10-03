@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function passwordAccount() {
+   return request.auth != null && request.auth.token.firebase.sign_in_provider == 'password';
+  }
+  match /users/{uid} {
+   allow get: if passwordAccount() && request.auth.uid == uid;
+   allow list, update, delete: if false;
+   allow create: if passwordAccount() && request.auth.uid == uid
+    && request.resource.data.keys().hasAll(['uid','name','email','role','requestedRole','className','staffCategory','approved','disabled','budgetCents','createdAt'])
+    && request.resource.data.keys().hasOnly(['uid','name','email','role','requestedRole','className','staffCategory','approved','disabled','budgetCents','createdAt'])
+    && request.resource.data.uid == uid
+    && request.resource.data.name is string && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 80
+    && request.resource.data.email == request.auth.token.email
+    && request.resource.data.role in ['student','staff']
+    && request.resource.data.requestedRole == request.resource.data.role
+    && request.resource.data.approved == false
+    && request.resource.data.disabled == false
+    && request.resource.data.budgetCents == 2000
+    && request.resource.data.createdAt == request.time
+    && ((request.resource.data.role == 'student'
+      && request.resource.data.className.matches('^[1-5][A-Za-z]{1,3}$')
+      && request.resource.data.staffCategory == '')
+     || (request.resource.data.role == 'staff'
+      && request.resource.data.className == ''
+      && request.resource.data.staffCategory in ['docente','segreteria','dirigente','vicepreside','collaboratore','ata']));
+  }
+  // All operational data requires the trusted API, even for Firebase admin claims.
+  // The service account uses IAM, bypasses these rules, and must remain server-side.
+  match /{document=**} { allow read, write: if false; }
+ }
+}
